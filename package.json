@@ -1,5 +1,5 @@
 {
-  "name": "@bigdatacorp/bigboost-mcp-server",
+  "name": "mcp-server-bigboot",
   "version": "1.0.0",
   "description": "Servidor MCP para integração com a API Bigboost da Bigdatacorp",
   "main": "dist/index.js",
@@ -32,11 +32,11 @@
     "windsurf",
     "claude"
   ],
-  "author": "Bigdatacorp <contato@bigdatacorp.com.br>",
+  "author": "zzcoder",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bigdatacorp/bigboost-mcp-server.git"
+    "url": "https://github.com/cyllas/mcp-server-bigboost.git"
   },
   "engines": {
     "node": ">=18.0.0"

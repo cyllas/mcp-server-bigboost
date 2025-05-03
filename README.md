@@ -1,4 +1,4 @@
-# Bigboost MCP Server
+# MCP Server Bigboot
 
 Servidor MCP (Model Context Protocol) para integração com a API Bigboost da Bigdatacorp. Este servidor permite que modelos de linguagem como o Claude possam acessar dados da Bigboost API de forma padronizada, permitindo consultas de dados de pessoas físicas e empresas através de diferentes parâmetros de busca.
 
@@ -293,9 +293,9 @@ npm run lint
 
 Para utilizar este servidor com o Windsurf (Claude Desktop), você precisa configurá-lo no arquivo `mcp_config.json`:
 
-1. Instale o pacote do servidor (após publicação no npm):
+1. Instale o pacote do servidor:
    ```bash
-   npm install -g @bigdatacorp/bigboost-mcp-server
+   npm install -g mcp-server-bigboot
    ```
 
 2. Adicione a configuração ao arquivo `~/.codeium/windsurf/mcp_config.json`:
@@ -306,7 +306,7 @@ Para utilizar este servidor com o Windsurf (Claude Desktop), você precisa confi
          "command": "npx",
          "args": [
            "-y",
-           "@bigdatacorp/bigboost-mcp-server"
+           "mcp-server-bigboot"
          ],
          "env": {
            "BIGBOOST_ACCESS_TOKEN": "seu-access-token",
