@@ -1,0 +1,66 @@
+{
+  "name": "@bigdatacorp/bigboost-mcp-server",
+  "version": "1.0.0",
+  "description": "Servidor MCP para integração com a API Bigboost da Bigdatacorp",
+  "main": "dist/index.js",
+  "bin": {
+    "bigboost-mcp-server": "./bin/cli.js"
+  },
+  "files": [
+    "dist/**/*",
+    "!dist/**/*.test.js",
+    "!dist/**/*.spec.js"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "dev:http": "ts-node src/index.ts --http",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "prepublishOnly": "npm run build",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "bigboost",
+    "bigdatacorp",
+    "api",
+    "windsurf",
+    "claude"
+  ],
+  "author": "Bigdatacorp <contato@bigdatacorp.com.br>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bigdatacorp/bigboost-mcp-server.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/jest": "^29.5.5",
+    "@types/node": "^22.15.3",
+    "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "eslint": "^8.49.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.0.3",
+    "supertest": "^7.1.0",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
+  }
+}
