@@ -1,6 +1,6 @@
 {
   "name": "mcp-server-bigboost",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Servidor MCP para integração com a API Bigboost da Bigdatacorp",
   "main": "dist/index.js",
   "bin": {
@@ -17,6 +17,7 @@
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "dev:http": "ts-node src/index.ts --http",
+    "monitor": "ts-node src/scripts/monitorConexoes.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint src/**/*.ts",
@@ -52,10 +53,12 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.0",
+    "@types/uuid": "^10.0.0",
     "axios": "^1.6.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mcp-server-bigboost": "^1.0.4",
+    "mcp-server-bigboost": "^1.0.5",
+    "uuid": "^11.1.0",
     "zod": "^3.22.4",
     "zod-to-json-schema": "^3.24.5"
   },

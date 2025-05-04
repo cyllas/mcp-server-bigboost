@@ -71,28 +71,44 @@ export function registerTools(server: any): void {
   // Registrar o handler para chamadas de ferramentas
   server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
     const { name, arguments: args } = request.params;
+    const requestId = request.id || 'unknown';
+    
+    // Importar logger de forma dinâmica para evitar dependência circular
+    const { info, error: logError } = await import('../utils/logger');
+    
+    info('Tool', `Chamada para ferramenta: ${name}`, { requestId, args });
     
     try {
+      let result;
       switch (name) {
         case 'consultaPessoa':
-          return await handleConsultaPessoa(args);
+          result = await handleConsultaPessoa(args);
+          break;
         case 'consultaEmpresa':
-          return await handleConsultaEmpresa(args);
+          result = await handleConsultaEmpresa(args);
+          break;
         case 'consultaQsa':
-          return await handleConsultaQsa(args);
+          result = await handleConsultaQsa(args);
+          break;
         case 'consultaRegistroEmpresa':
-          return await handleConsultaRegistroEmpresa(args);
+          result = await handleConsultaRegistroEmpresa(args);
+          break;
         case 'consultaPessoaTelefone':
-          return await handleConsultaPessoaTelefone(args);
+          result = await handleConsultaPessoaTelefone(args);
+          break;
         case 'consultaPessoaEmail':
-          return await handleConsultaPessoaEmail(args);
+          result = await handleConsultaPessoaEmail(args);
+          break;
         default:
           throw new Error(`Ferramenta desconhecida: ${name}`);
       }
-    } catch (error) {
-      console.error(`Erro ao executar a ferramenta ${name}:`, error);
+      
+      info('Tool', `Ferramenta ${name} executada com sucesso`, { requestId });
+      return result;
+    } catch (err) {
+      logError('Tool', `Erro ao executar a ferramenta ${name}`, { requestId, error: err });
       return {
-        content: [formatErrorResponse(error)]
+        content: [formatErrorResponse(err)]
       };
     }
   });
@@ -144,10 +160,17 @@ export function registerTools(server: any): void {
  * @returns Resposta formatada para o MCP
  */
 async function handleConsultaPessoa(args: any) {
+  // Importar logger de forma dinâmica para evitar dependência circular
+  const { debug, error: logError } = await import('../utils/logger');
+  
+  debug('ConsultaPessoa', 'Validando argumentos', { args });
   const validatedArgs = consultaPessoaSchema.parse(args);
   const cpfLimpo = validatedArgs.cpf.replace(/[^\d]/g, '');
   
+  debug('ConsultaPessoa', 'CPF formatado', { cpf: validatedArgs.cpf, cpfLimpo });
+  
   try {
+    debug('ConsultaPessoa', 'Executando consulta na API Bigboost');
     const response = await bigboostService.executeQuery(
       '/pessoas',
       {
@@ -156,12 +179,13 @@ async function handleConsultaPessoa(args: any) {
       }
     );
     
+    debug('ConsultaPessoa', 'Consulta executada com sucesso');
     return {
       content: [formatResponse(response)]
     };
-  } catch (error: any) {
-    console.error(`Erro ao executar a ferramenta consultaPessoa:`, error);
-    throw error;
+  } catch (err: any) {
+    logError('ConsultaPessoa', `Erro ao executar consulta`, { error: err });
+    throw err;
   }
 }
 
@@ -171,10 +195,17 @@ async function handleConsultaPessoa(args: any) {
  * @returns Resposta formatada para o MCP
  */
 async function handleConsultaEmpresa(args: any) {
+  // Importar logger de forma dinâmica para evitar dependência circular
+  const { debug, error: logError } = await import('../utils/logger');
+  
+  debug('ConsultaEmpresa', 'Validando argumentos', { args });
   const validatedArgs = consultaEmpresaSchema.parse(args);
   const cnpjLimpo = validatedArgs.cnpj.replace(/[^\d]/g, '');
   
+  debug('ConsultaEmpresa', 'CNPJ formatado', { cnpj: validatedArgs.cnpj, cnpjLimpo });
+  
   try {
+    debug('ConsultaEmpresa', 'Executando consulta na API Bigboost');
     const response = await bigboostService.executeQuery(
       '/empresas',
       {
@@ -183,12 +214,13 @@ async function handleConsultaEmpresa(args: any) {
       }
     );
     
+    debug('ConsultaEmpresa', 'Consulta executada com sucesso');
     return {
       content: [formatResponse(response)]
     };
-  } catch (error: any) {
-    console.error(`Erro ao executar a ferramenta consultaEmpresa:`, error);
-    throw error;
+  } catch (err: any) {
+    logError('ConsultaEmpresa', `Erro ao executar consulta`, { error: err });
+    throw err;
   }
 }
 
@@ -198,10 +230,17 @@ async function handleConsultaEmpresa(args: any) {
  * @returns Resposta formatada para o MCP
  */
 async function handleConsultaQsa(args: any) {
+  // Importar logger de forma dinâmica para evitar dependência circular
+  const { debug, error: logError } = await import('../utils/logger');
+  
+  debug('ConsultaQsa', 'Validando argumentos', { args });
   const validatedArgs = consultaQsaSchema.parse(args);
   const cnpjLimpo = validatedArgs.cnpj.replace(/[^\d]/g, '');
   
+  debug('ConsultaQsa', 'CNPJ formatado', { cnpj: validatedArgs.cnpj, cnpjLimpo });
+  
   try {
+    debug('ConsultaQsa', 'Executando consulta na API Bigboost');
     const response = await bigboostService.executeQuery(
       '/empresas',
       {
@@ -210,12 +249,13 @@ async function handleConsultaQsa(args: any) {
       }
     );
     
+    debug('ConsultaQsa', 'Consulta executada com sucesso');
     return {
       content: [formatResponse(response)]
     };
-  } catch (error: any) {
-    console.error(`Erro ao executar a ferramenta consultaQsa:`, error);
-    throw error;
+  } catch (err: any) {
+    logError('ConsultaQsa', `Erro ao executar consulta`, { error: err });
+    throw err;
   }
 }
 
@@ -225,10 +265,17 @@ async function handleConsultaQsa(args: any) {
  * @returns Resposta formatada para o MCP
  */
 async function handleConsultaRegistroEmpresa(args: any) {
+  // Importar logger de forma dinâmica para evitar dependência circular
+  const { debug, error: logError } = await import('../utils/logger');
+  
+  debug('ConsultaRegistroEmpresa', 'Validando argumentos', { args });
   const validatedArgs = consultaRegistroEmpresaSchema.parse(args);
   const cnpjLimpo = validatedArgs.cnpj.replace(/[^\d]/g, '');
   
+  debug('ConsultaRegistroEmpresa', 'CNPJ formatado', { cnpj: validatedArgs.cnpj, cnpjLimpo });
+  
   try {
+    debug('ConsultaRegistroEmpresa', 'Executando consulta na API Bigboost');
     const response = await bigboostService.executeQuery(
       '/empresas',
       {
@@ -237,12 +284,13 @@ async function handleConsultaRegistroEmpresa(args: any) {
       }
     );
     
+    debug('ConsultaRegistroEmpresa', 'Consulta executada com sucesso');
     return {
       content: [formatResponse(response)]
     };
-  } catch (error: any) {
-    console.error(`Erro ao executar a ferramenta consultaRegistroEmpresa:`, error);
-    throw error;
+  } catch (err: any) {
+    logError('ConsultaRegistroEmpresa', `Erro ao executar consulta`, { error: err });
+    throw err;
   }
 }
 
@@ -252,10 +300,17 @@ async function handleConsultaRegistroEmpresa(args: any) {
  * @returns Resposta formatada para o MCP
  */
 async function handleConsultaPessoaTelefone(args: any) {
+  // Importar logger de forma dinâmica para evitar dependência circular
+  const { debug, error: logError } = await import('../utils/logger');
+  
+  debug('ConsultaPessoaTelefone', 'Validando argumentos', { args });
   const validatedArgs = consultaPessoaTelefoneSchema.parse(args);
   const telefoneLimpo = validatedArgs.telefone.replace(/[^\d]/g, '');
   
+  debug('ConsultaPessoaTelefone', 'Telefone formatado', { telefone: validatedArgs.telefone, telefoneLimpo });
+  
   try {
+    debug('ConsultaPessoaTelefone', 'Executando consulta na API Bigboost');
     const response = await bigboostService.executeQuery(
       '/pessoas',
       {
@@ -264,12 +319,13 @@ async function handleConsultaPessoaTelefone(args: any) {
       }
     );
     
+    debug('ConsultaPessoaTelefone', 'Consulta executada com sucesso');
     return {
       content: [formatResponse(response)]
     };
-  } catch (error: any) {
-    console.error(`Erro ao executar a ferramenta consultaPessoaTelefone:`, error);
-    throw error;
+  } catch (err: any) {
+    logError('ConsultaPessoaTelefone', `Erro ao executar consulta`, { error: err });
+    throw err;
   }
 }
 
@@ -279,9 +335,16 @@ async function handleConsultaPessoaTelefone(args: any) {
  * @returns Resposta formatada para o MCP
  */
 async function handleConsultaPessoaEmail(args: any) {
+  // Importar logger de forma dinâmica para evitar dependência circular
+  const { debug, error: logError } = await import('../utils/logger');
+  
+  debug('ConsultaPessoaEmail', 'Validando argumentos', { args });
   const validatedArgs = consultaPessoaEmailSchema.parse(args);
   
+  debug('ConsultaPessoaEmail', 'Email validado', { email: validatedArgs.email });
+  
   try {
+    debug('ConsultaPessoaEmail', 'Executando consulta na API Bigboost');
     const response = await bigboostService.executeQuery(
       '/pessoas',
       {
@@ -290,11 +353,12 @@ async function handleConsultaPessoaEmail(args: any) {
       }
     );
     
+    debug('ConsultaPessoaEmail', 'Consulta executada com sucesso');
     return {
       content: [formatResponse(response)]
     };
-  } catch (error: any) {
-    console.error(`Erro ao executar a ferramenta consultaPessoaEmail:`, error);
-    throw error;
+  } catch (err: any) {
+    logError('ConsultaPessoaEmail', `Erro ao executar consulta`, { error: err });
+    throw err;
   }
 }

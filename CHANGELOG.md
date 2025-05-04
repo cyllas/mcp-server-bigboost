@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.6 (2025-05-04)
+
+### Melhorias
+- Implementado sistema robusto de logs para múltiplas conexões
+- Adicionado monitoramento de conexões em tempo real
+- Criado utilitário para visualização de logs e estatísticas de conexão
+- Interceptação de logs do console para evitar interferência na comunicação do protocolo MCP
+- Adicionado rastreamento detalhado de conexões com IDs únicos
+- Implementado sistema de logs estruturados em arquivos JSON
+
 ## 1.0.5 (2025-05-04)
 
 ### Correções
