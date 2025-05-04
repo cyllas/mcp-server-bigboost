@@ -2,9 +2,17 @@
  * Classe que representa o servidor MCP para integração com a API Bigboost
  * Exporta a classe Server do SDK do MCP
  */
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
+import { loadSdk } from './compatibility';
+
+// Carregar o SDK de forma compatível
+const sdk = loadSdk();
+
+// Extrair componentes do SDK
+const { McpServer: Server, StdioServerTransport } = sdk;
+
+// Definir esquemas para compatibilidade
+const CallToolRequestSchema = { type: 'object', properties: {} };
+const ListToolsRequestSchema = { type: 'object', properties: {} };
 
 export { Server as McpServer, StdioServerTransport, CallToolRequestSchema, ListToolsRequestSchema };
 

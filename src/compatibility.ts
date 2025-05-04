@@ -39,6 +39,8 @@ function createMockSdk() {
   
   // Classe mock do McpServer
   class MockMcpServer {
+    private requestHandlers: Map<any, Function> = new Map();
+    
     constructor(options?: any) {
       console.log('Inicializando MockMcpServer com opções:', options);
     }
@@ -57,10 +59,29 @@ function createMockSdk() {
       console.log('Parando servidor mock');
       return Promise.resolve();
     }
+
+    connect(transport: any) {
+      console.log('Conectando servidor mock ao transporte');
+      return Promise.resolve(this);
+    }
+    
+    setRequestHandler(schema: any, handler: Function) {
+      console.log('Registrando handler para esquema:', schema);
+      this.requestHandlers.set(schema, handler);
+      return this;
+    }
+  }
+
+  // Classe mock do StdioServerTransport
+  class MockStdioServerTransport {
+    constructor() {
+      console.log('Inicializando MockStdioServerTransport');
+    }
   }
   
   return {
-    McpServer: MockMcpServer
+    McpServer: MockMcpServer,
+    StdioServerTransport: MockStdioServerTransport
   };
 }
 

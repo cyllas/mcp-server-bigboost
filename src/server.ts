@@ -31,7 +31,7 @@ export function createServer() {
  * @param server Servidor MCP
  * @param transport Transporte a ser utilizado (opcional, padrão: StdioServerTransport)
  */
-export async function startServer(server: McpServer, transport?: any) {
+export async function startServer(server: any, transport?: any) {
   // Criar transporte padrão se não for fornecido
   const serverTransport = transport || new StdioServerTransport();
   
