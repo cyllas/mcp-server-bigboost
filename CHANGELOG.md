@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.7 (2025-05-04)
+
+### Correções
+- Corrigido problema de mensagens em português interferindo na comunicação JSON do protocolo MCP
+- Implementado filtro de stdout/stderr para interceptar mensagens que causam erros de parsing JSON
+- Adicionado sistema de detecção de palavras-chave em português para filtragem de logs
+- Redirecionamento de mensagens de texto para arquivos de log em vez de stdout/stderr
+
 ## 1.0.6 (2025-05-04)
 
 ### Melhorias

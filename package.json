@@ -1,6 +1,6 @@
 {
   "name": "mcp-server-bigboost",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Servidor MCP para integração com a API Bigboost da Bigdatacorp",
   "main": "dist/index.js",
   "bin": {

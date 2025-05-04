@@ -3,6 +3,7 @@ import { registerTools } from './tools';
 import dotenv from 'dotenv';
 import { v4 as uuidv4 } from 'uuid';
 import { logger, info, error, logConnection, logConnectionClosed, logError, LogLevel } from './utils/logger';
+import { initStdioFilter } from './utils/stdioFilter';
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -15,6 +16,9 @@ const activeConnections = new Map<string, any>();
  * @returns Objeto com servidor e função de limpeza
  */
 export function createServer() {
+  // Inicializar o filtro de stdout/stderr para evitar interferência na comunicação JSON
+  initStdioFilter();
+  
   // Criar instância do servidor MCP
   const server = createMcpServer({
     description: 'Servidor MCP para integração com a API Bigboost da Bigdatacorp'
