@@ -24,7 +24,10 @@ const portugueseKeywords = [
   'Consulta',
   'registrada',
   'iniciado',
-  'sucesso'
+  'sucesso',
+  'falhou',
+  'inicializar',
+  'requisição'
 ];
 
 /**
@@ -39,11 +42,25 @@ function containsPortugueseKeywords(text: string): boolean {
  */
 function looksLikeJson(text: string): boolean {
   const trimmed = text.trim();
-  return (
+  
+  // Verificar se é um formato JSON válido
+  if (
     (trimmed.startsWith('{') && trimmed.endsWith('}')) ||
     (trimmed.startsWith('[') && trimmed.endsWith(']')) ||
     (trimmed.startsWith('"') && trimmed.endsWith('"'))
-  );
+  ) {
+    return true;
+  }
+  
+  // Verificar se é uma mensagem do protocolo MCP (JSON-RPC)
+  if (trimmed.includes('"jsonrpc":') || 
+      trimmed.includes('"method":') || 
+      trimmed.includes('"params":') || 
+      trimmed.includes('"id":')) {
+    return true;
+  }
+  
+  return false;
 }
 
 /**
@@ -78,6 +95,19 @@ export function initStdioFilter(): void {
     
     // Registrar no arquivo de log
     writeToLogFile(stdoutLogFile, text);
+    
+    // Verificar se é uma mensagem de erro do MCP Server
+    if (text.includes('failed to initialize') || text.includes('request failed')) {
+      logger.log(LogLevel.ERROR, 'MCP', text.trim());
+      // Não filtrar mensagens de erro do MCP Server
+      return originalStdoutWrite(chunk, ...args);
+    }
+    
+    // Verificar se é uma mensagem do protocolo MCP (JSON-RPC)
+    if (text.includes('"jsonrpc":') || text.includes('"method":') || text.includes('"params":') || text.includes('"id":')) {
+      // Não filtrar mensagens do protocolo MCP
+      return originalStdoutWrite(chunk, ...args);
+    }
     
     // Verificar se deve filtrar
     if (containsPortugueseKeywords(text) && !looksLikeJson(text)) {

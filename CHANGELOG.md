@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.8 (2025-05-04)
+
+### Melhorias
+- Aprimorada a detecção de mensagens do protocolo MCP (JSON-RPC) no filtro de stdout/stderr
+- Melhorada a implementação mock do SDK para garantir compatibilidade com Node.js v23.11.0
+- Adicionado sistema de log para depuração da implementação mock que escreve em arquivos separados
+- Implementado suporte completo a eventos para o servidor mock
+- Adicionado processamento de mensagens JSON-RPC recebidas via stdin
+- Implementado envio de respostas via stdout
+- Adicionado suporte para chamadas de ferramentas (tools) na implementação mock
+
 ## 1.0.7 (2025-05-04)
 
 ### Correções
