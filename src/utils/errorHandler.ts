@@ -59,47 +59,32 @@ export function processStatusCodes(status: BigboostStatus[]): void {
  * @returns Objeto formatado para resposta do MCP
  */
 export function formatErrorResponse(error: unknown): { type: 'text', text: string } {
+  // Prepara o objeto de erro para o formato esperado pelo MCP
+  let errorObj: any = {
+    error: {
+      message: 'Erro desconhecido'
+    }
+  };
+
   if (error instanceof BigboostError) {
-    return {
-      type: 'text',
-      text: JSON.stringify({
-        error: {
-          code: error.code,
-          message: error.message,
-          category: error.category
-        }
-      }, null, 2)
+    errorObj.error = {
+      code: error.code,
+      message: error.message,
+      category: error.category
+    };
+  } else if (error instanceof RateLimitExceededError || error instanceof DatasetUnavailableError) {
+    errorObj.error = {
+      message: error.message
+    };
+  } else if (error instanceof Error) {
+    errorObj.error = {
+      message: error.message
     };
   }
 
-  if (error instanceof RateLimitExceededError || error instanceof DatasetUnavailableError) {
-    return {
-      type: 'text',
-      text: JSON.stringify({
-        error: {
-          message: error.message
-        }
-      }, null, 2)
-    };
-  }
-
-  if (error instanceof Error) {
-    return {
-      type: 'text',
-      text: JSON.stringify({
-        error: {
-          message: error.message
-        }
-      }, null, 2)
-    };
-  }
-
+  // Retorna no formato esperado pelo MCP
   return {
     type: 'text',
-    text: JSON.stringify({
-      error: {
-        message: 'Erro desconhecido'
-      }
-    }, null, 2)
+    text: JSON.stringify(errorObj, null, 2)
   };
 }

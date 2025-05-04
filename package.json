@@ -1,10 +1,10 @@
 {
-  "name": "mcp-server-bigboot",
+  "name": "mcp-server-bigboost",
   "version": "1.0.0",
   "description": "Servidor MCP para integração com a API Bigboost da Bigdatacorp",
   "main": "dist/index.js",
   "bin": {
-    "bigboost-mcp-server": "./bin/cli.js"
+    "mcp-server-bigboost": "bin/cli.js"
   },
   "files": [
     "dist/**/*",
@@ -21,7 +21,8 @@
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "prepublishOnly": "npm run build",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "postinstall": "node scripts/fix-sdk-compatibility.js"
   },
   "keywords": [
     "mcp",
@@ -36,7 +37,14 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cyllas/mcp-server-bigboost.git"
+    "url": "git+https://github.com/cyllas/mcp-server-bigboost.git"
+  },
+  "homepage": "https://github.com/cyllas/mcp-server-bigboost",
+  "bugs": {
+    "url": "https://github.com/cyllas/mcp-server-bigboost/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -46,7 +54,8 @@
     "axios": "^1.6.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zod-to-json-schema": "^3.24.5"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
