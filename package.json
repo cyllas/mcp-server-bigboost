@@ -23,7 +23,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "prepublishOnly": "npm run build",
     "prepare": "npm run build",
-    "postinstall": "node scripts/fix-sdk-compatibility.js"
+    "postinstall": "node -e \"try { require('./scripts/fix-sdk-compatibility.js') } catch(e) { console.warn('Aviso: Script de compatibilidade não encontrado ou falhou, mas isso não impedirá o uso do pacote.'); }\""
   },
   "keywords": [
     "mcp",
