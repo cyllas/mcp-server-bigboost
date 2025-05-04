@@ -174,38 +174,47 @@ module.exports = {
     
     // Forçar a atualização dos arquivos mock mesmo que não tenha havido modificações no package.json
     // Isso garante que os arquivos de implementação mock sempre tenham os métodos necessários
-    
-    // Atualizar o arquivo ESM mock
+        // Atualizar o arquivo ESM mock
     fs.writeFileSync(esmIndexPath, `
-// Mock ESM do SDK do MCP
+// Mock ESM do SDK do MCP - Implementação silenciosa para evitar problemas de comunicação
+
+// Logger silencioso para não interferir na comunicação MCP
+const silentLog = (...args) => {
+  // Descomente para depuração
+  // const fs = require('fs');
+  // fs.appendFileSync('mcp-mock-debug.log', \`\${new Date().toISOString()} - \${args.join(' ')}\\n\`);
+};
+
 export class McpServer {
   constructor(options) {
-    console.log('Mock ESM McpServer iniciado com opções:', options);
+    this.options = options || {};
     this.requestHandlers = new Map();
+    silentLog('Mock ESM McpServer iniciado com opções:', options);
   }
   
   tool(name, schema, handler, options) {
-    console.log(\`Registrando ferramenta \${name}\`);
+    silentLog(\`Registrando ferramenta \${name}\`);
     return this;
   }
   
   start() {
-    console.log('Iniciando servidor mock ESM');
+    silentLog('Iniciando servidor mock ESM');
     return Promise.resolve(this);
   }
   
   stop() {
-    console.log('Parando servidor mock ESM');
+    silentLog('Parando servidor mock ESM');
     return Promise.resolve();
   }
   
   connect(transport) {
-    console.log('Conectando servidor mock ESM ao transporte');
+    this.transport = transport;
+    silentLog('Conectando servidor mock ESM ao transporte');
     return Promise.resolve(this);
   }
   
   setRequestHandler(schema, handler) {
-    console.log('Registrando handler para esquema:', schema);
+    silentLog('Registrando handler para esquema:', schema);
     this.requestHandlers.set(schema, handler);
     return this;
   }
@@ -213,42 +222,58 @@ export class McpServer {
 
 export class StdioServerTransport {
   constructor() {
-    console.log('Mock ESM StdioServerTransport iniciado');
+    this.onMessage = null;
+    silentLog('Mock ESM StdioServerTransport iniciado');
+  }
+  
+  setMessageHandler(handler) {
+    this.onMessage = handler;
+    return this;
   }
 }
 `);
     
     // Atualizar o arquivo CJS mock
     fs.writeFileSync(cjsIndexPath, `
-// Mock CJS do SDK do MCP
+// Mock CJS do SDK do MCP - Implementação silenciosa para evitar problemas de comunicação
+
+// Logger silencioso para não interferir na comunicação MCP
+const silentLog = (...args) => {
+  // Descomente para depuração
+  // const fs = require('fs');
+  // fs.appendFileSync('mcp-mock-debug.log', \`\${new Date().toISOString()} - \${args.join(' ')}\\n\`);
+};
+
 class McpServer {
   constructor(options) {
-    console.log('Mock CJS McpServer iniciado com opções:', options);
+    this.options = options || {};
     this.requestHandlers = new Map();
+    silentLog('Mock CJS McpServer iniciado com opções:', options);
   }
   
   tool(name, schema, handler, options) {
-    console.log(\`Registrando ferramenta \${name}\`);
+    silentLog(\`Registrando ferramenta \${name}\`);
     return this;
   }
   
   start() {
-    console.log('Iniciando servidor mock CJS');
+    silentLog('Iniciando servidor mock CJS');
     return Promise.resolve(this);
   }
   
   stop() {
-    console.log('Parando servidor mock CJS');
+    silentLog('Parando servidor mock CJS');
     return Promise.resolve();
   }
   
   connect(transport) {
-    console.log('Conectando servidor mock CJS ao transporte');
+    this.transport = transport;
+    silentLog('Conectando servidor mock CJS ao transporte');
     return Promise.resolve(this);
   }
   
   setRequestHandler(schema, handler) {
-    console.log('Registrando handler para esquema:', schema);
+    silentLog('Registrando handler para esquema:', schema);
     this.requestHandlers.set(schema, handler);
     return this;
   }
@@ -256,7 +281,13 @@ class McpServer {
 
 class StdioServerTransport {
   constructor() {
-    console.log('Mock CJS StdioServerTransport iniciado');
+    this.onMessage = null;
+    silentLog('Mock CJS StdioServerTransport iniciado');
+  }
+  
+  setMessageHandler(handler) {
+    this.onMessage = handler;
+    return this;
   }
 }
 
@@ -266,7 +297,7 @@ module.exports = {
 };
 `);
     
-    console.log('Arquivos de implementação mock atualizados com sucesso!');
+    console.log('Arquivos de implementação mock silenciosa atualizados com sucesso!');
   } else {
     console.warn('Arquivo package.json do SDK não encontrado. Pulando correção de compatibilidade.');
   }

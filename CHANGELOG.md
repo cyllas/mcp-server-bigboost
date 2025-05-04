@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.5 (2025-05-04)
+
+### Correções
+- Corrigido problema de comunicação entre o cliente e o servidor MCP
+- Implementação silenciosa do mock do SDK para evitar interferência na comunicação MCP
+- Adicionado suporte para comunicação correta entre o cliente e o servidor quando usando a versão mock
+
 ## 1.0.4 (2025-05-04)
 
 ### Correções

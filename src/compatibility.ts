@@ -33,40 +33,51 @@ export function resolveSdkPath(): string {
 
 /**
  * Mock do SDK do MCP para casos onde não é possível carregar o SDK original
+ * Esta implementação evita enviar logs para o console, que podem interferir na comunicação MCP
  */
 function createMockSdk() {
-  console.warn('Criando versão mock do SDK para compatibilidade');
+  // Usar um logger silencioso para não interferir na comunicação MCP
+  const silentLog = (...args: any[]) => {
+    // Descomente para depuração
+    // fs.appendFileSync('mcp-mock-debug.log', `${new Date().toISOString()} - ${args.join(' ')}\n`);
+  };
+  
+  silentLog('Criando versão mock do SDK para compatibilidade');
   
   // Classe mock do McpServer
   class MockMcpServer {
     private requestHandlers: Map<any, Function> = new Map();
+    private options: any;
+    private transport: any;
     
     constructor(options?: any) {
-      console.log('Inicializando MockMcpServer com opções:', options);
+      this.options = options || {};
+      silentLog('Inicializando MockMcpServer com opções:', JSON.stringify(options));
     }
     
     tool(name: string, schema: any, handler: any, options?: any) {
-      console.log(`Registrando ferramenta ${name}`);
+      silentLog(`Registrando ferramenta ${name}`);
       return this;
     }
     
     start() {
-      console.log('Iniciando servidor mock');
+      silentLog('Iniciando servidor mock');
       return Promise.resolve(this);
     }
     
     stop() {
-      console.log('Parando servidor mock');
+      silentLog('Parando servidor mock');
       return Promise.resolve();
     }
 
     connect(transport: any) {
-      console.log('Conectando servidor mock ao transporte');
+      this.transport = transport;
+      silentLog('Conectando servidor mock ao transporte');
       return Promise.resolve(this);
     }
     
     setRequestHandler(schema: any, handler: Function) {
-      console.log('Registrando handler para esquema:', schema);
+      silentLog('Registrando handler para esquema:', JSON.stringify(schema));
       this.requestHandlers.set(schema, handler);
       return this;
     }
@@ -74,8 +85,16 @@ function createMockSdk() {
 
   // Classe mock do StdioServerTransport
   class MockStdioServerTransport {
+    private onMessage: ((message: any) => void) | null = null;
+    
     constructor() {
-      console.log('Inicializando MockStdioServerTransport');
+      silentLog('Inicializando MockStdioServerTransport');
+    }
+    
+    // Métodos adicionais para simular o comportamento do transporte
+    setMessageHandler(handler: (message: any) => void) {
+      this.onMessage = handler;
+      return this;
     }
   }
   
